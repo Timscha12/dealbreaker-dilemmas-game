@@ -173,3 +173,62 @@
 .dark .card-shadow {
   box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.4);
 }
+
+/* Broken Heart Animation */
+@keyframes heart-break-left {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  20% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  40% { transform: translate(-20px, 10px) rotate(-10deg); opacity: 1; }
+  100% { transform: translate(-40px, 20px) rotate(-20deg); opacity: 0; }
+}
+
+@keyframes heart-break-right {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  20% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  40% { transform: translate(20px, 10px) rotate(10deg); opacity: 1; }
+  100% { transform: translate(40px, 20px) rotate(20deg); opacity: 0; }
+}
+
+.animate-heart-break-left {
+  animation: heart-break-left 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-heart-break-right {
+  animation: heart-break-right 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.broken-heart-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 40;
+}
+
+.broken-heart {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.heart-half {
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 120px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.heart-left {
+  left: 0;
+  background-position: left;
+}
+
+.heart-right {
+  right: 0;
+  background-position: right;
+}

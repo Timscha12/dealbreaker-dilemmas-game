@@ -6,11 +6,13 @@ import { cn } from '@/lib/utils';
 interface AdBannerProps {
   className?: string;
   position?: 'top' | 'bottom' | 'inline';
+  forceShow?: boolean;
 }
 
 const AdBanner: React.FC<AdBannerProps> = ({ 
   className, 
-  position = 'inline'
+  position = 'inline',
+  forceShow = false
 }) => {
   return (
     <div 

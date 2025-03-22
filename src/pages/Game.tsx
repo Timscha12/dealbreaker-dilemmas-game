@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Skull, Check, X, RefreshCw } from 'lucide-react';
+import { RefreshCw, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import Button from '@/components/Button';
 import ScenarioCard from '@/components/ScenarioCard';
@@ -13,6 +13,7 @@ import {
   handleDecision, 
   startNewRound,
   getCurrentScenario,
+  getRoundDuration,
   GameState
 } from '@/utils/gameLogic';
 import { cn } from '@/lib/utils';
@@ -21,10 +22,11 @@ const Game: React.FC = () => {
   const navigate = useNavigate();
   const [gameState, setGameState] = useState<GameState>(initializeGame());
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [animateSkull, setAnimateSkull] = useState(false);
+  const [showBrokenHeart, setShowBrokenHeart] = useState(false);
   const [showNewRoundButton, setShowNewRoundButton] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [skullAnimation, setSkullAnimation] = useState('');
+  const [heartAnimation, setHeartAnimation] = useState('');
+  const [showAd, setShowAd] = useState(false);
   
   const acceptedScenariosRef = useRef<HTMLDivElement>(null);
   
@@ -47,20 +49,50 @@ const Game: React.FC = () => {
   useEffect(() => {
     if (gameState.isGameOver) {
       if (gameState.currentScenarioIndex < gameState.scenarios.length) {
-        toast.error(
-          gameState.acceptedScenarios.length > 0 
-            ? `Nach ${gameState.acceptedScenarios.length} akzeptierten Eigenschaften ist Schluss!` 
-            : "Das war direkt ein Dealbreaker!"
-        );
+        toast.error(getGameOverMessage(gameState.acceptedScenarios.length));
       } else {
         toast.success("Wow! Du hast alle Eigenschaften akzeptiert!");
+      }
+      
+      // Show ad every 3rd round when game is over after dealbreaker
+      if (gameState.currentRound % 3 === 0 && gameState.currentScenarioIndex < gameState.scenarios.length) {
+        setShowAd(true);
+        
+        // Hide ad after 5 seconds
+        setTimeout(() => {
+          setShowAd(false);
+        }, 5000);
       }
       
       setTimeout(() => {
         setShowNewRoundButton(true);
       }, 1500);
     }
-  }, [gameState.isGameOver, gameState.currentScenarioIndex, gameState.scenarios.length, gameState.acceptedScenarios.length]);
+  }, [gameState.isGameOver, gameState.currentScenarioIndex, gameState.scenarios.length, gameState.acceptedScenarios.length, gameState.currentRound]);
+  
+  const getGameOverMessage = (acceptedCount: number) => {
+    if (acceptedCount === 0) {
+      return "Das war direkt ein Dealbreaker! Ziemlich anspruchsvoll!";
+    } else if (acceptedCount <= 2) {
+      return `Nach nur ${acceptedCount} akzeptierten Eigenschaften ist Schluss! Du bist sehr wählerisch.`;
+    } else if (acceptedCount <= 5) {
+      return `Nach ${acceptedCount} akzeptierten Eigenschaften ist Schluss! Du hast Standards.`;
+    } else if (acceptedCount <= 8) {
+      return `Du hast ${acceptedCount} Eigenschaften akzeptiert. Fast geschafft!`;
+    } else {
+      return `${acceptedCount} Eigenschaften akzeptiert! Nur wenige waren zu viel für dich.`;
+    }
+  };
+  
+  const getGameCompletedMessage = (acceptedCount: number, totalCount: number) => {
+    if (acceptedCount === totalCount) {
+      return "Alle Eigenschaften akzeptiert! Du bist wirklich unglaublich anspruchslos!";
+    } else if (acceptedCount >= totalCount - 2) {
+      return "Fast alle Eigenschaften akzeptiert! Du bist äußerst tolerant.";
+    } else {
+      return `${acceptedCount} von ${totalCount} Eigenschaften akzeptiert. Beeindruckend!`;
+    }
+  };
   
   const handleOkay = () => {
     if (isTransitioning || gameState.isGameOver) return;
@@ -76,31 +108,26 @@ const Game: React.FC = () => {
   const handleDealbreaker = () => {
     if (isTransitioning || gameState.isGameOver) return;
     
-    setAnimateSkull(true);
-    setSkullAnimation('animate-skull-shake');
+    setShowBrokenHeart(true);
+    setHeartAnimation('animate-heart-break');
     setIsTransitioning(true);
     
-    // Show skull with shake animation
+    // Wait for animation to complete, then update game state
     setTimeout(() => {
-      // Then switch to disappearing animation
-      setSkullAnimation('animate-skull-disappear');
+      setGameState(prevState => handleDecision(prevState, 'dealbreaker'));
+      setIsTransitioning(false);
       
-      // Update game state after animation starts
+      // Reset animation after it completes
       setTimeout(() => {
-        setGameState(prevState => handleDecision(prevState, 'dealbreaker'));
-        setIsTransitioning(false);
-        
-        // Reset animation after it completes
-        setTimeout(() => {
-          setAnimateSkull(false);
-        }, 1200);
-      }, 600);
-    }, 600);
+        setShowBrokenHeart(false);
+      }, 1000);
+    }, 1500);
   };
   
   const handleNewRound = () => {
-    setAnimateSkull(false);
+    setShowBrokenHeart(false);
     setShowNewRoundButton(false);
+    setShowAd(false);
     setGameState(prevState => startNewRound(prevState));
   };
   
@@ -137,15 +164,34 @@ const Game: React.FC = () => {
           </div>
         </div>
         
-        {/* Ad Banner at top */}
-        <AdBanner position="top" />
+        {showBrokenHeart && (
+          <div className="broken-heart-container">
+            <div className="broken-heart">
+              <div 
+                className="heart-half heart-left animate-heart-break-left" 
+                style={{ backgroundImage: "url('/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png')" }}
+              ></div>
+              <div 
+                className="heart-half heart-right animate-heart-break-right" 
+                style={{ backgroundImage: "url('/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png')" }}
+              ></div>
+            </div>
+          </div>
+        )}
         
-        {animateSkull && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-40 flex items-center justify-center">
-            <Skull 
-              size={120} 
-              className={`text-dealbreaker ${skullAnimation}`}
-            />
+        {/* Show ad if needed (only shown every 3rd round after dealbreaker) */}
+        {showAd && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/80 backdrop-blur-md">
+            <div className="relative p-6 w-11/12 max-w-md">
+              <AdBanner forceShow={true} />
+              <button 
+                onClick={() => setShowAd(false)} 
+                className="absolute top-2 right-2 bg-gray-800 text-white p-1 rounded-full"
+              >
+                <X size={16} />
+              </button>
+              <p className="text-center text-white mt-4 text-sm">Ad schließt in wenigen Sekunden automatisch...</p>
+            </div>
           </div>
         )}
         
@@ -180,15 +226,18 @@ const Game: React.FC = () => {
                 <div className="mb-3">
                   <Check size={40} className="text-okay mx-auto" />
                 </div>
-                <h2 className="text-xl font-semibold mb-2">Alle Szenarien akzeptiert!</h2>
-                <p className="text-gray-400">Du bist wirklich unglaublich anspruchslos!</p>
+                <h2 className="text-xl font-semibold mb-2">
+                  {getGameCompletedMessage(gameState.acceptedScenarios.length, gameState.scenarios.length)}
+                </h2>
+                <p className="text-gray-400">
+                  {getRoundDuration(gameState) < 30 
+                    ? "Das ging aber schnell!" 
+                    : "Du hast dir Zeit genommen, jede Eigenschaft zu bewerten."}
+                </p>
               </div>
             </AnimatedTransition>
           )}
         </div>
-        
-        {/* Ad Banner inline */}
-        <AdBanner position="inline" />
         
         <div className="flex flex-col gap-3 mb-6">
           <AnimatedTransition
@@ -247,7 +296,7 @@ const Game: React.FC = () => {
           </p>
         </AnimatedTransition>
         
-        {/* Ad Banner at bottom */}
+        {/* Ad Banner only at bottom */}
         <AdBanner position="bottom" />
       </main>
     </div>
