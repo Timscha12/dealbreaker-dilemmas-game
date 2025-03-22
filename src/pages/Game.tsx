@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Check, X, RefreshCw } from 'lucide-react';
+import { Heart, HeartCrack, Check, X, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import Button from '@/components/Button';
 import ScenarioCard from '@/components/ScenarioCard';
@@ -23,33 +22,28 @@ const Game: React.FC = () => {
   const [animateHeartBreak, setAnimateHeartBreak] = useState(false);
   const [showNewRoundButton, setShowNewRoundButton] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showHeartCrack, setShowHeartCrack] = useState(false);
   
   const acceptedScenariosRef = useRef<HTMLDivElement>(null);
   
-  // Scroll to the latest scenario when a new one is added
   useEffect(() => {
     if (acceptedScenariosRef.current && gameState.acceptedScenarios.length > 0) {
       acceptedScenariosRef.current.scrollTop = acceptedScenariosRef.current.scrollHeight;
     }
   }, [gameState.acceptedScenarios.length]);
   
-  // Handle game over state
   useEffect(() => {
     if (gameState.isGameOver) {
-      // Only animate heart break if it's a dealbreaker (not if all scenarios are accepted)
       if (gameState.currentScenarioIndex < gameState.scenarios.length) {
-        // Show end of round message
         toast.error(
           gameState.acceptedScenarios.length > 0 
             ? `Nach ${gameState.acceptedScenarios.length} akzeptierten Eigenschaften ist Schluss!` 
             : "Das war direkt ein Dealbreaker!"
         );
       } else {
-        // All scenarios accepted!
         toast.success("Wow! Du hast alle Eigenschaften akzeptiert!");
       }
       
-      // Show new round button after delay
       setTimeout(() => {
         setShowNewRoundButton(true);
       }, 1500);
@@ -61,7 +55,6 @@ const Game: React.FC = () => {
     
     setIsTransitioning(true);
     
-    // Add a slight delay to allow for animations
     setTimeout(() => {
       setGameState(prevState => handleDecision(prevState, 'okay'));
       setIsTransitioning(false);
@@ -71,18 +64,17 @@ const Game: React.FC = () => {
   const handleDealbreaker = () => {
     if (isTransitioning || gameState.isGameOver) return;
     
-    // Show heart break animation only when dealbreaker is clicked
     setAnimateHeartBreak(true);
+    setShowHeartCrack(true);
     setIsTransitioning(true);
     
-    // Add a slight delay for animations
     setTimeout(() => {
       setGameState(prevState => handleDecision(prevState, 'dealbreaker'));
       setIsTransitioning(false);
       
-      // Reset heart animation after a while
       setTimeout(() => {
         setAnimateHeartBreak(false);
+        setShowHeartCrack(false);
       }, 1000);
     }, 300);
   };
@@ -109,7 +101,6 @@ const Game: React.FC = () => {
       />
       
       <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-6 py-4 overflow-hidden">
-        {/* Game progress indicator */}
         <div className="w-full mb-6">
           <div className="flex justify-between text-sm text-gray-500 mb-2">
             <span className="font-medium">Runde {gameState.currentRound}</span>
@@ -127,18 +118,24 @@ const Game: React.FC = () => {
           </div>
         </div>
         
-        {/* Heart animation (for dealbreaker) - only visible when animateHeartBreak is true */}
         {animateHeartBreak && (
           <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 flex items-center justify-center">
-            <Heart 
-              size={120} 
-              className="text-dealbreaker animate-heart-break" 
-              fill="currentColor" 
-            />
+            {showHeartCrack ? (
+              <HeartCrack 
+                size={120} 
+                className="text-dealbreaker animate-heart-break" 
+                fill="currentColor"
+              />
+            ) : (
+              <Heart 
+                size={120} 
+                className="text-dealbreaker animate-heart-break" 
+                fill="currentColor" 
+              />
+            )}
           </div>
         )}
         
-        {/* Previously accepted scenarios */}
         <div 
           ref={acceptedScenariosRef}
           className="mb-4 max-h-[40vh] overflow-y-auto scrollbar-hide"
@@ -152,7 +149,6 @@ const Game: React.FC = () => {
           ))}
         </div>
         
-        {/* Current scenario card */}
         <div className="flex-1 flex items-center justify-center mb-6 min-h-[120px]">
           {currentScenario ? (
             <ScenarioCard
@@ -178,7 +174,6 @@ const Game: React.FC = () => {
           )}
         </div>
         
-        {/* Decision buttons or new round button */}
         <div className="flex justify-center gap-4 mb-6">
           <AnimatedTransition
             show={!gameState.isGameOver}
@@ -224,7 +219,6 @@ const Game: React.FC = () => {
           </AnimatedTransition>
         </div>
         
-        {/* Game stats (visible when game is over) */}
         <AnimatedTransition
           show={gameState.isGameOver}
           animateIn="animate-fade-in"
