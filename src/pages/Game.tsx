@@ -140,14 +140,14 @@ const Game: React.FC = () => {
         </div>
         
         {showBrokenHeart && (
-          <div className="broken-heart-container">
-            <div className="broken-heart">
+          <div className="broken-heart-container fixed inset-0 flex items-center justify-center z-50 bg-black/80 backdrop-blur-md">
+            <div className="broken-heart relative w-32 h-32">
               <div 
-                className="heart-half heart-left animate-heart-break-left" 
+                className="heart-half heart-left absolute left-0 w-16 h-32 animate-heart-break-left"
                 style={{ backgroundImage: "url('/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png')" }}
               ></div>
               <div 
-                className="heart-half heart-right animate-heart-break-right" 
+                className="heart-half heart-right absolute right-0 w-16 h-32 animate-heart-break-right"
                 style={{ backgroundImage: "url('/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png')" }}
               ></div>
             </div>
