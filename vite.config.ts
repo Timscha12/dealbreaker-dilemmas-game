@@ -6,6 +6,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Entferne die base: "#/" Option, da sie Probleme beim lokalen Build verursacht
   server: {
     host: "::",
     port: 8080,
