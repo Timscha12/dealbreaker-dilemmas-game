@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -134,18 +135,23 @@ export default {
 					'42%': { transform: 'scale(1.3)' },
 					'70%': { transform: 'scale(1)' }
 				},
-				'heart-break': {
+				'heart-pulse': {
 					'0%': { transform: 'scale(1)', opacity: '1' },
+					'50%': { transform: 'scale(1.2)', opacity: '1' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
+				},
+				'heart-break': {
+					'0%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
 					'10%': { transform: 'scale(1.2) rotate(0deg)', opacity: '1' },
 					'20%': { transform: 'scale(1.3) rotate(5deg)', opacity: '1' },
-					'30%': { transform: 'scale(1.3) rotate(-5deg)', opacity: '1' },
-					'40%': { transform: 'scale(1.3) rotate(5deg)', opacity: '1' },
-					'50%': { transform: 'scale(1.2) rotate(0deg)', opacity: '1' },
-					'60%': { transform: 'scale(1.1) rotate(0deg) translateX(-5px)', opacity: '0.9' },
-					'70%': { transform: 'scale(1) rotate(0deg) translateX(5px)', opacity: '0.8' },
-					'80%': { transform: 'scale(0.95) translateY(5px) translateX(-5px)', opacity: '0.7' },
-					'90%': { transform: 'scale(0.9) translateY(5px) translateX(5px)', opacity: '0.6' },
-					'100%': { transform: 'scale(0.85) translateY(10px)', opacity: '0.5' }
+					'30%': { transform: 'scale(1.3) rotate(-8deg)', opacity: '1' },
+					'40%': { transform: 'scale(1.3) rotate(8deg)', opacity: '1' },
+					'50%': { transform: 'scale(1.2) rotate(-5deg)', opacity: '1' },
+					'60%': { transform: 'scale(1.1) rotate(0deg) translateX(-10px)', opacity: '0.9' },
+					'70%': { transform: 'scale(1) rotate(0deg) translateX(10px) translateY(5px)', opacity: '0.8' },
+					'80%': { transform: 'scale(0.9) translateY(10px) translateX(-15px)', opacity: '0.7' },
+					'90%': { transform: 'scale(0.8) translateY(15px) translateX(15px) rotate(5deg)', opacity: '0.6' },
+					'100%': { transform: 'scale(0.7) translateY(20px) rotate(-5deg)', opacity: '0.5' }
 				},
 				'pulse': {
 					'0%, 100%': { opacity: '1' },
@@ -166,7 +172,8 @@ export default {
 				'slide-in-left': 'slide-in-left 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
 				'slide-out-left': 'slide-out-left 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
 				'heartbeat': 'heartbeat 1.5s ease-in-out',
-				'heart-break': 'heart-break 1s ease-in-out forwards',
+				'heart-break': 'heart-break 1.5s ease-in-out forwards',
+				'heart-pulse': 'heart-pulse 0.6s ease-in-out',
 				'pulse': 'pulse 1.5s ease-in-out infinite'
 			}
 		}

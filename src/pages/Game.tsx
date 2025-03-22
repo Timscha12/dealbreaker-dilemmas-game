@@ -24,6 +24,7 @@ const Game: React.FC = () => {
   const [showNewRoundButton, setShowNewRoundButton] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showHeartCrack, setShowHeartCrack] = useState(false);
+  const [heartAnimation, setHeartAnimation] = useState('');
   
   const acceptedScenariosRef = useRef<HTMLDivElement>(null);
   
@@ -66,13 +67,15 @@ const Game: React.FC = () => {
     if (isTransitioning || gameState.isGameOver) return;
     
     setAnimateHeartBreak(true);
-    setShowHeartCrack(false); // Start with normal heart
+    setShowHeartCrack(false);
+    setHeartAnimation('animate-heart-pulse');
     setIsTransitioning(true);
     
     // Show normal heart first with a pulse animation
     setTimeout(() => {
       // Then switch to broken heart with the breaking animation
       setShowHeartCrack(true);
+      setHeartAnimation('animate-heart-break');
       
       // Update game state after animation starts
       setTimeout(() => {
@@ -82,9 +85,9 @@ const Game: React.FC = () => {
         // Reset animation after it completes
         setTimeout(() => {
           setAnimateHeartBreak(false);
-        }, 1200); // Give more time for the animation to complete
-      }, 400); // Slightly longer delay before state update
-    }, 300); // Slightly longer initial delay
+        }, 1200);
+      }, 600);
+    }, 600);
   };
   
   const handleNewRound = () => {
@@ -131,13 +134,13 @@ const Game: React.FC = () => {
             {showHeartCrack ? (
               <HeartCrack 
                 size={120} 
-                className="text-dealbreaker animate-heart-break" 
+                className={`text-dealbreaker ${heartAnimation}`}
                 fill="currentColor"
               />
             ) : (
               <Heart 
                 size={120} 
-                className="text-dealbreaker animate-pulse" 
+                className={`text-dealbreaker ${heartAnimation}`}
                 fill="currentColor" 
               />
             )}
@@ -182,32 +185,32 @@ const Game: React.FC = () => {
           )}
         </div>
         
-        <div className="flex justify-center gap-3 mb-6">
+        <div className="flex flex-col gap-3 mb-6">
           <AnimatedTransition
             show={!gameState.isGameOver}
             animateOut="animate-fade-out"
-            className="w-full flex gap-3"
+            className="w-full flex flex-col gap-3"
           >
-            <Button
-              variant="dealbreaker"
-              size="lg"
-              className="flex-1 shadow-md hover:shadow-lg transition-all text-sm md:text-base"
-              onClick={handleDealbreaker}
-              disabled={isTransitioning || !currentScenario}
-            >
-              <X size={18} className="mr-1" />
-              Dealbreaker
-            </Button>
-            
             <Button
               variant="okay"
               size="lg"
-              className="flex-1 shadow-md hover:shadow-lg transition-all text-sm md:text-base"
+              className="w-full shadow-md hover:shadow-lg transition-all text-sm md:text-base"
               onClick={handleOkay}
               disabled={isTransitioning || !currentScenario}
             >
-              <Check size={18} className="mr-1" />
+              <Check size={18} className="mr-2" />
               Okay
+            </Button>
+            
+            <Button
+              variant="dealbreaker"
+              size="lg"
+              className="w-full shadow-md hover:shadow-lg transition-all text-sm md:text-base"
+              onClick={handleDealbreaker}
+              disabled={isTransitioning || !currentScenario}
+            >
+              <X size={18} className="mr-2" />
+              Dealbreaker
             </Button>
           </AnimatedTransition>
           
@@ -221,7 +224,7 @@ const Game: React.FC = () => {
               className="w-full bg-gradient-to-r from-primary to-primary/80 shadow-md hover:shadow-lg transition-all text-sm md:text-base"
               onClick={handleNewRound}
             >
-              <RefreshCw size={18} className="mr-1" />
+              <RefreshCw size={18} className="mr-2" />
               Neue Runde
             </Button>
           </AnimatedTransition>
