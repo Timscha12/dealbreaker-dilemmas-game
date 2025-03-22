@@ -140,16 +140,20 @@ const Game: React.FC = () => {
         </div>
         
         {showBrokenHeart && (
-          <div className="broken-heart-container fixed inset-0 flex items-center justify-center z-50 bg-black/80 backdrop-blur-md">
-            <div className="broken-heart relative w-32 h-32">
-              <div 
-                className="heart-half heart-left absolute left-0 w-16 h-32 animate-heart-break-left"
-                style={{ backgroundImage: "url('/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png')" }}
-              ></div>
-              <div 
-                className="heart-half heart-right absolute right-0 w-16 h-32 animate-heart-break-right"
-                style={{ backgroundImage: "url('/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png')" }}
-              ></div>
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/80 backdrop-blur-md">
+            <div className="relative" style={{ width: "160px", height: "160px" }}>
+              <img 
+                src="/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png"
+                alt="Heart"
+                className="absolute w-full h-full"
+                style={{ clipPath: "polygon(0 0, 50% 0, 50% 100%, 0 100%)", animation: "heart-break-left 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1)" }}
+              />
+              <img 
+                src="/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png"
+                alt="Heart"
+                className="absolute w-full h-full"
+                style={{ clipPath: "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)", animation: "heart-break-right 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1)" }}
+              />
             </div>
           </div>
         )}
@@ -220,23 +224,23 @@ const Game: React.FC = () => {
             <Button
               variant="okay"
               size="lg"
-              className="w-full shadow-md hover:shadow-lg transition-all text-sm md:text-base"
+              className="w-full shadow-md hover:shadow-lg transition-all text-sm md:text-base flex items-center justify-center"
               onClick={handleOkay}
               disabled={isTransitioning || !currentScenario}
             >
               <Check size={18} className="mr-2" />
-              Okay
+              <span>Okay</span>
             </Button>
             
             <Button
               variant="dealbreaker"
               size="lg"
-              className="w-full shadow-md hover:shadow-lg transition-all text-sm md:text-base"
+              className="w-full shadow-md hover:shadow-lg transition-all text-sm md:text-base flex items-center justify-center"
               onClick={handleDealbreaker}
               disabled={isTransitioning || !currentScenario}
             >
               <X size={18} className="mr-2" />
-              Dealbreaker
+              <span>Dealbreaker</span>
             </Button>
           </AnimatedTransition>
           
@@ -247,11 +251,11 @@ const Game: React.FC = () => {
           >
             <Button
               size="lg"
-              className="w-full bg-gradient-to-r from-primary to-primary/80 shadow-md hover:shadow-lg transition-all text-sm md:text-base"
+              className="w-full bg-gradient-to-r from-primary to-primary/80 shadow-md hover:shadow-lg transition-all text-sm md:text-base flex items-center justify-center"
               onClick={handleNewRound}
             >
               <RefreshCw size={18} className="mr-2" />
-              Neue Runde
+              <span>Neue Runde</span>
             </Button>
           </AnimatedTransition>
         </div>
