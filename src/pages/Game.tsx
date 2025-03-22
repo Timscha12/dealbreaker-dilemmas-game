@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RefreshCw, Check, X } from 'lucide-react';
@@ -142,17 +141,29 @@ const Game: React.FC = () => {
         {showBrokenHeart && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/80 backdrop-blur-md">
             <div className="relative" style={{ width: "160px", height: "160px" }}>
-              <img 
-                src="/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png"
-                alt="Heart"
+              <div 
                 className="absolute w-full h-full"
-                style={{ clipPath: "polygon(0 0, 50% 0, 50% 100%, 0 100%)", animation: "heart-break-left 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1)" }}
+                style={{ 
+                  clipPath: "polygon(0 0, 50% 0, 50% 100%, 0 100%)", 
+                  animation: "heart-break-left 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1)",
+                  backgroundColor: "#e11d48",
+                  maskImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-heart'%3E%3Cpath d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/%3E%3C/svg%3E\")",
+                  maskSize: "cover",
+                  maskRepeat: "no-repeat",
+                  maskPosition: "left"
+                }}
               />
-              <img 
-                src="/lovable-uploads/f4383ebf-6a2e-400e-893d-7cd699d16f1e.png"
-                alt="Heart"
+              <div 
                 className="absolute w-full h-full"
-                style={{ clipPath: "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)", animation: "heart-break-right 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1)" }}
+                style={{ 
+                  clipPath: "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)", 
+                  animation: "heart-break-right 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1)",
+                  backgroundColor: "#e11d48",
+                  maskImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-heart'%3E%3Cpath d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/%3E%3C/svg%3E\")",
+                  maskSize: "cover",
+                  maskRepeat: "no-repeat",
+                  maskPosition: "right"
+                }}
               />
             </div>
           </div>
