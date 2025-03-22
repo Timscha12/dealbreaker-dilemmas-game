@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RefreshCw, Check, X } from 'lucide-react';
@@ -17,7 +16,7 @@ import {
   GameState
 } from '@/utils/gameLogic';
 import { cn } from '@/lib/utils';
-import { getCustomGameOverMessage } from '@/utils/messageUtils';
+import { getCustomGameOverMessage, getCustomGameOverEmoji } from '@/utils/messageUtils';
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
@@ -32,10 +31,8 @@ const Game: React.FC = () => {
   const acceptedScenariosRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    // Apply dark mode to the document
     document.documentElement.classList.add('dark');
     
-    // Clean up function to remove dark mode when component unmounts
     return () => {
       document.documentElement.classList.remove('dark');
     };
@@ -55,11 +52,9 @@ const Game: React.FC = () => {
         toast.success("Wow! Du hast alle Eigenschaften akzeptiert!");
       }
       
-      // Show ad every 3rd round when game is over after dealbreaker
       if (gameState.currentRound % 3 === 0 && gameState.currentScenarioIndex < gameState.scenarios.length) {
         setShowAd(true);
         
-        // Hide ad after 5 seconds
         setTimeout(() => {
           setShowAd(false);
         }, 5000);
@@ -76,13 +71,7 @@ const Game: React.FC = () => {
   };
   
   const getGameCompletedMessage = (acceptedCount: number, totalCount: number) => {
-    if (acceptedCount === totalCount) {
-      return "💖 Seelenverwandte. Oder einfach völlig schmerzfrei?\nHerzlichen Glückwunsch! Du würdest sogar heiraten, obwohl sie/er mit Pflanzen redet und Katzen tanzen lässt.";
-    } else if (acceptedCount >= totalCount - 2) {
-      return "Fast alle Eigenschaften akzeptiert! Du bist äußerst tolerant.";
-    } else {
-      return `${acceptedCount} von ${totalCount} Eigenschaften akzeptiert. Beeindruckend!`;
-    }
+    return getCustomGameOverMessage(acceptedCount);
   };
   
   const handleOkay = () => {
@@ -103,12 +92,10 @@ const Game: React.FC = () => {
     setHeartAnimation('animate-heart-break');
     setIsTransitioning(true);
     
-    // Wait for animation to complete, then update game state
     setTimeout(() => {
       setGameState(prevState => handleDecision(prevState, 'dealbreaker'));
       setIsTransitioning(false);
       
-      // Reset animation after it completes
       setTimeout(() => {
         setShowBrokenHeart(false);
       }, 1000);
@@ -170,7 +157,6 @@ const Game: React.FC = () => {
           </div>
         )}
         
-        {/* Show ad if needed (only shown every 3rd round after dealbreaker) */}
         {showAd && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/80 backdrop-blur-md">
             <div className="relative p-6 w-11/12 max-w-md">
@@ -215,7 +201,7 @@ const Game: React.FC = () => {
             <AnimatedTransition show={gameState.isGameOver && gameState.currentScenarioIndex >= gameState.scenarios.length}>
               <div className="text-center p-6 bg-gradient-to-b from-slate-800 to-slate-900 rounded-xl border border-slate-700 shadow-md">
                 <div className="mb-3">
-                  <Check size={40} className="text-okay mx-auto" />
+                  <div className="text-2xl mx-auto">{getCustomGameOverEmoji(gameState.acceptedScenarios.length)}</div>
                 </div>
                 <h2 className="text-xl font-semibold mb-2">
                   {getGameCompletedMessage(gameState.acceptedScenarios.length, gameState.scenarios.length)}
@@ -287,7 +273,6 @@ const Game: React.FC = () => {
           </p>
         </AnimatedTransition>
         
-        {/* Ad Banner only at bottom */}
         <AdBanner position="bottom" />
       </main>
     </div>
@@ -295,3 +280,4 @@ const Game: React.FC = () => {
 };
 
 export default Game;
+
