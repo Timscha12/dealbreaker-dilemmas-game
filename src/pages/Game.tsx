@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, HeartCrack, Check, X, RefreshCw } from 'lucide-react';
+import { Skull, Check, X, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import Button from '@/components/Button';
 import ScenarioCard from '@/components/ScenarioCard';
 import Header from '@/components/Header';
 import AnimatedTransition from '@/components/AnimatedTransition';
+import AdBanner from '@/components/AdBanner';
 import { 
   initializeGame, 
   handleDecision, 
@@ -20,13 +21,22 @@ const Game: React.FC = () => {
   const navigate = useNavigate();
   const [gameState, setGameState] = useState<GameState>(initializeGame());
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [animateHeartBreak, setAnimateHeartBreak] = useState(false);
+  const [animateSkull, setAnimateSkull] = useState(false);
   const [showNewRoundButton, setShowNewRoundButton] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showHeartCrack, setShowHeartCrack] = useState(false);
-  const [heartAnimation, setHeartAnimation] = useState('');
+  const [skullAnimation, setSkullAnimation] = useState('');
   
   const acceptedScenariosRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    // Apply dark mode to the document
+    document.documentElement.classList.add('dark');
+    
+    // Clean up function to remove dark mode when component unmounts
+    return () => {
+      document.documentElement.classList.remove('dark');
+    };
+  }, []);
   
   useEffect(() => {
     if (acceptedScenariosRef.current && gameState.acceptedScenarios.length > 0) {
@@ -66,16 +76,14 @@ const Game: React.FC = () => {
   const handleDealbreaker = () => {
     if (isTransitioning || gameState.isGameOver) return;
     
-    setAnimateHeartBreak(true);
-    setShowHeartCrack(false);
-    setHeartAnimation('animate-heart-pulse');
+    setAnimateSkull(true);
+    setSkullAnimation('animate-skull-shake');
     setIsTransitioning(true);
     
-    // Show normal heart first with a pulse animation
+    // Show skull with shake animation
     setTimeout(() => {
-      // Then switch to broken heart with the breaking animation
-      setShowHeartCrack(true);
-      setHeartAnimation('animate-heart-break');
+      // Then switch to disappearing animation
+      setSkullAnimation('animate-skull-disappear');
       
       // Update game state after animation starts
       setTimeout(() => {
@@ -84,14 +92,14 @@ const Game: React.FC = () => {
         
         // Reset animation after it completes
         setTimeout(() => {
-          setAnimateHeartBreak(false);
+          setAnimateSkull(false);
         }, 1200);
       }, 600);
     }, 600);
   };
   
   const handleNewRound = () => {
-    setAnimateHeartBreak(false);
+    setAnimateSkull(false);
     setShowNewRoundButton(false);
     setGameState(prevState => startNewRound(prevState));
   };
@@ -103,7 +111,7 @@ const Game: React.FC = () => {
   const currentScenario = getCurrentScenario(gameState);
   
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-background to-secondary/20">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-900 to-slate-800 text-white">
       <Header 
         showBackButton 
         showSettingsButton 
@@ -113,11 +121,11 @@ const Game: React.FC = () => {
       
       <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-4 py-4 overflow-hidden">
         <div className="w-full mb-6">
-          <div className="flex justify-between text-sm text-gray-500 mb-2">
+          <div className="flex justify-between text-sm text-gray-400 mb-2">
             <span className="font-medium">Runde {gameState.currentRound}</span>
             <span>{gameState.currentScenarioIndex} / {gameState.scenarios.length}</span>
           </div>
-          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden shadow-inner">
+          <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden shadow-inner">
             <div 
               className="h-full bg-gradient-to-r from-okay to-okay-light rounded-full transition-all duration-500"
               style={{ 
@@ -129,27 +137,21 @@ const Game: React.FC = () => {
           </div>
         </div>
         
-        {animateHeartBreak && (
-          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 flex items-center justify-center">
-            {showHeartCrack ? (
-              <HeartCrack 
-                size={120} 
-                className={`text-dealbreaker ${heartAnimation}`}
-                fill="currentColor"
-              />
-            ) : (
-              <Heart 
-                size={120} 
-                className={`text-dealbreaker ${heartAnimation}`}
-                fill="currentColor" 
-              />
-            )}
+        {/* Ad Banner at top */}
+        <AdBanner position="top" />
+        
+        {animateSkull && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-40 flex items-center justify-center">
+            <Skull 
+              size={120} 
+              className={`text-dealbreaker ${skullAnimation}`}
+            />
           </div>
         )}
         
         <div 
           ref={acceptedScenariosRef}
-          className="mb-4 max-h-[40vh] overflow-y-auto scrollbar-hide"
+          className="mb-4 max-h-[35vh] overflow-y-auto scrollbar-hide"
         >
           {gameState.acceptedScenarios.map((scenario, index) => (
             <ScenarioCard
@@ -174,16 +176,19 @@ const Game: React.FC = () => {
             />
           ) : (
             <AnimatedTransition show={gameState.isGameOver && gameState.currentScenarioIndex >= gameState.scenarios.length}>
-              <div className="text-center p-6 bg-gradient-to-b from-white to-gray-50 rounded-xl border border-gray-100 shadow-md">
+              <div className="text-center p-6 bg-gradient-to-b from-slate-800 to-slate-900 rounded-xl border border-slate-700 shadow-md">
                 <div className="mb-3">
-                  <Heart size={40} className="text-okay mx-auto" fill="currentColor" />
+                  <Check size={40} className="text-okay mx-auto" />
                 </div>
                 <h2 className="text-xl font-semibold mb-2">Alle Szenarien akzeptiert!</h2>
-                <p className="text-gray-600">Du bist wirklich unglaublich anspruchslos!</p>
+                <p className="text-gray-400">Du bist wirklich unglaublich anspruchslos!</p>
               </div>
             </AnimatedTransition>
           )}
         </div>
+        
+        {/* Ad Banner inline */}
+        <AdBanner position="inline" />
         
         <div className="flex flex-col gap-3 mb-6">
           <AnimatedTransition
@@ -235,12 +240,15 @@ const Game: React.FC = () => {
           animateIn="animate-fade-in"
           className="text-center"
         >
-          <p className="text-gray-600 glass-effect py-2 px-4 rounded-full inline-block text-sm">
+          <p className="text-gray-400 glass-effect py-2 px-4 rounded-full inline-block text-sm">
             {gameState.acceptedScenarios.length > 0 
               ? `Du hast ${gameState.acceptedScenarios.length} Eigenschaften akzeptiert.`
               : "Das war sofort ein Dealbreaker für dich!"}
           </p>
         </AnimatedTransition>
+        
+        {/* Ad Banner at bottom */}
+        <AdBanner position="bottom" />
       </main>
     </div>
   );

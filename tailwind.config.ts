@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -156,6 +155,19 @@ export default {
 				'pulse': {
 					'0%, 100%': { opacity: '1' },
 					'50%': { opacity: '0.5' }
+				},
+				'skull-shake': {
+					'0%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
+					'20%': { transform: 'scale(1.2) rotate(-5deg)', opacity: '1' },
+					'40%': { transform: 'scale(1.2) rotate(5deg)', opacity: '1' },
+					'60%': { transform: 'scale(1.1) rotate(-3deg)', opacity: '1' },
+					'80%': { transform: 'scale(1.05) rotate(2deg)', opacity: '0.9' },
+					'100%': { transform: 'scale(1.3) rotate(0deg)', opacity: '0.7' }
+				},
+				'skull-disappear': {
+					'0%': { transform: 'scale(1.3) rotate(0deg)', opacity: '0.7' },
+					'50%': { transform: 'scale(0.9) translateY(10px)', opacity: '0.5' },
+					'100%': { transform: 'scale(0.7) translateY(20px) rotate(5deg)', opacity: '0' }
 				}
 			},
 			animation: {
@@ -174,7 +186,9 @@ export default {
 				'heartbeat': 'heartbeat 1.5s ease-in-out',
 				'heart-break': 'heart-break 1.5s ease-in-out forwards',
 				'heart-pulse': 'heart-pulse 0.6s ease-in-out',
-				'pulse': 'pulse 1.5s ease-in-out infinite'
+				'pulse': 'pulse 1.5s ease-in-out infinite',
+				'skull-shake': 'skull-shake 0.6s ease-in-out',
+				'skull-disappear': 'skull-disappear 0.9s ease-in-out forwards'
 			}
 		}
 	},

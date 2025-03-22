@@ -46,29 +46,29 @@
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
 
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
 
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 20% 98%;
+    --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
     --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 20% 98%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
+    --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
@@ -111,7 +111,7 @@
   }
 
   .glass-effect {
-    @apply backdrop-blur-md bg-white/80 dark:bg-black/40 border border-white/20 dark:border-white/10;
+    @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10;
   }
   
   .card-shadow {
@@ -124,6 +124,10 @@
   
   .text-balance {
     text-wrap: balance;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
 
@@ -159,4 +163,13 @@
   opacity: 0;
   transform: scale(0.98);
   transition: opacity 300ms, transform 300ms;
+}
+
+/* Dark mode enhancement for cards and UI elements */
+.dark .scenario-card {
+  @apply bg-gradient-to-b from-slate-800 to-slate-900 border-slate-700 text-slate-200;
+}
+
+.dark .card-shadow {
+  box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.4);
 }
