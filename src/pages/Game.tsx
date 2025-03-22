@@ -46,11 +46,7 @@ const Game: React.FC = () => {
   
   useEffect(() => {
     if (gameState.isGameOver) {
-      if (gameState.currentScenarioIndex < gameState.scenarios.length) {
-        toast.error(getGameOverMessage(gameState.acceptedScenarios.length));
-      } else {
-        toast.success("Wow! Du hast alle Eigenschaften akzeptiert!");
-      }
+      // Don't show toast notifications anymore as the messages are displayed in the text field
       
       if (gameState.currentRound % 3 === 0 && gameState.currentScenarioIndex < gameState.scenarios.length) {
         setShowAd(true);
@@ -207,9 +203,7 @@ const Game: React.FC = () => {
                   {getGameCompletedMessage(gameState.acceptedScenarios.length, gameState.scenarios.length)}
                 </h2>
                 <p className="text-gray-400">
-                  {getRoundDuration(gameState) < 30 
-                    ? "Das ging aber schnell!" 
-                    : "Du hast dir Zeit genommen, jede Eigenschaft zu bewerten."}
+                  
                 </p>
               </div>
             </AnimatedTransition>
@@ -280,4 +274,3 @@ const Game: React.FC = () => {
 };
 
 export default Game;
-
