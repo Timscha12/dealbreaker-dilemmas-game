@@ -69,9 +69,9 @@ const Game: React.FC = () => {
     setShowHeartCrack(false); // Start with normal heart
     setIsTransitioning(true);
     
-    // First show the normal heart
+    // Show normal heart first with a pulse animation
     setTimeout(() => {
-      // Then switch to broken heart
+      // Then switch to broken heart with the breaking animation
       setShowHeartCrack(true);
       
       // Update game state after animation starts
@@ -82,9 +82,9 @@ const Game: React.FC = () => {
         // Reset animation after it completes
         setTimeout(() => {
           setAnimateHeartBreak(false);
-        }, 1000);
-      }, 300);
-    }, 200);
+        }, 1200); // Give more time for the animation to complete
+      }, 400); // Slightly longer delay before state update
+    }, 300); // Slightly longer initial delay
   };
   
   const handleNewRound = () => {

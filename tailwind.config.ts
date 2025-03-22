@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -136,15 +135,17 @@ export default {
 					'70%': { transform: 'scale(1)' }
 				},
 				'heart-break': {
-					'0%': { transform: 'scale(1)' },
-					'20%': { transform: 'scale(1.3) rotate(5deg)' },
-					'30%': { transform: 'scale(1.3) rotate(-5deg)' },
-					'40%': { transform: 'scale(1.3) rotate(5deg)' },
-					'50%': { transform: 'scale(1) rotate(0deg)' },
-					'60%': { transform: 'scale(0.9) translateX(-10px)' },
-					'70%': { transform: 'scale(0.9) translateX(10px)' },
-					'80%': { transform: 'scale(0.9) translateY(10px)' },
-					'100%': { transform: 'scale(0.8) translateY(0)' }
+					'0%': { transform: 'scale(1)', opacity: '1' },
+					'10%': { transform: 'scale(1.2) rotate(0deg)', opacity: '1' },
+					'20%': { transform: 'scale(1.3) rotate(5deg)', opacity: '1' },
+					'30%': { transform: 'scale(1.3) rotate(-5deg)', opacity: '1' },
+					'40%': { transform: 'scale(1.3) rotate(5deg)', opacity: '1' },
+					'50%': { transform: 'scale(1.2) rotate(0deg)', opacity: '1' },
+					'60%': { transform: 'scale(1.1) rotate(0deg) translateX(-5px)', opacity: '0.9' },
+					'70%': { transform: 'scale(1) rotate(0deg) translateX(5px)', opacity: '0.8' },
+					'80%': { transform: 'scale(0.95) translateY(5px) translateX(-5px)', opacity: '0.7' },
+					'90%': { transform: 'scale(0.9) translateY(5px) translateX(5px)', opacity: '0.6' },
+					'100%': { transform: 'scale(0.85) translateY(10px)', opacity: '0.5' }
 				},
 				'pulse': {
 					'0%, 100%': { opacity: '1' },
