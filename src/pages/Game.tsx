@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, HeartCrack, Check, X, RefreshCw } from 'lucide-react';
@@ -65,18 +66,25 @@ const Game: React.FC = () => {
     if (isTransitioning || gameState.isGameOver) return;
     
     setAnimateHeartBreak(true);
-    setShowHeartCrack(true);
+    setShowHeartCrack(false); // Start with normal heart
     setIsTransitioning(true);
     
+    // First show the normal heart
     setTimeout(() => {
-      setGameState(prevState => handleDecision(prevState, 'dealbreaker'));
-      setIsTransitioning(false);
+      // Then switch to broken heart
+      setShowHeartCrack(true);
       
+      // Update game state after animation starts
       setTimeout(() => {
-        setAnimateHeartBreak(false);
-        setShowHeartCrack(false);
-      }, 1000);
-    }, 300);
+        setGameState(prevState => handleDecision(prevState, 'dealbreaker'));
+        setIsTransitioning(false);
+        
+        // Reset animation after it completes
+        setTimeout(() => {
+          setAnimateHeartBreak(false);
+        }, 1000);
+      }, 300);
+    }, 200);
   };
   
   const handleNewRound = () => {
@@ -129,7 +137,7 @@ const Game: React.FC = () => {
             ) : (
               <Heart 
                 size={120} 
-                className="text-dealbreaker animate-heart-break" 
+                className="text-dealbreaker animate-pulse" 
                 fill="currentColor" 
               />
             )}
