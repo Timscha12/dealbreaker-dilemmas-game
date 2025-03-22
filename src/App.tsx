@@ -10,6 +10,7 @@ import Game from "./pages/Game";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
+// Create QueryClient outside of the component
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -21,16 +22,14 @@ const App = () => {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner theme="dark" />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/game" element={<Game />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </TooltipProvider>
+        <Toaster />
+        <Sonner theme="dark" />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/game" element={<Game />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </QueryClientProvider>
     </BrowserRouter>
   );
