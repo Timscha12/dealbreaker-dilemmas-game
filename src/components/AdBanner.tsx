@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -14,6 +14,23 @@ const AdBanner: React.FC<AdBannerProps> = ({
   position = 'bottom',
   forceShow = false
 }) => {
+  const [isProduction, setIsProduction] = useState(false);
+  
+  useEffect(() => {
+    // Check if we're running in production or development
+    const hostname = window.location.hostname;
+    setIsProduction(hostname !== 'localhost' && !hostname.includes('lovable'));
+  }, []);
+
+  // Display banner ad initialization message in console
+  useEffect(() => {
+    if (isProduction) {
+      console.log('Banner ad would be displayed in production with ID: ca-app-pub-9403941304964602/8097335064');
+    } else {
+      console.log('Banner ad would be displayed with test ID in development');
+    }
+  }, [isProduction]);
+
   return (
     <div 
       className={cn(

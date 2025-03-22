@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RefreshCw, Check, X } from 'lucide-react';
@@ -17,6 +18,7 @@ import {
 } from '@/utils/gameLogic';
 import { cn } from '@/lib/utils';
 import { getCustomGameOverMessage, getCustomGameOverEmoji } from '@/utils/messageUtils';
+import { prepareInterstitialAd, showInterstitialAd } from '@/utils/adService';
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
@@ -27,11 +29,15 @@ const Game: React.FC = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [heartAnimation, setHeartAnimation] = useState('');
   const [showAd, setShowAd] = useState(false);
+  const [dealbreakerCounter, setDealbreakerCounter] = useState(0);
   
   const acceptedScenariosRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     document.documentElement.classList.add('dark');
+    
+    // Initialize ad service on component mount
+    prepareInterstitialAd();
     
     return () => {
       document.documentElement.classList.remove('dark');
@@ -84,6 +90,15 @@ const Game: React.FC = () => {
   const handleDealbreaker = () => {
     if (isTransitioning || gameState.isGameOver) return;
     
+    // Increment dealbreaker counter and show ad if needed
+    const newCounter = dealbreakerCounter + 1;
+    setDealbreakerCounter(newCounter);
+    
+    if (newCounter % 3 === 0) {
+      // Every 3rd dealbreaker, show interstitial ad
+      showInterstitialAd();
+    }
+    
     setShowBrokenHeart(true);
     setHeartAnimation('animate-heart-break');
     setIsTransitioning(true);
@@ -102,6 +117,10 @@ const Game: React.FC = () => {
     setShowBrokenHeart(false);
     setShowNewRoundButton(false);
     setShowAd(false);
+    
+    // Prepare a new interstitial ad for the next round
+    prepareInterstitialAd();
+    
     setGameState(prevState => startNewRound(prevState));
   };
   
