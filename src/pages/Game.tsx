@@ -108,7 +108,7 @@ const Game: React.FC = () => {
         onSoundToggle={toggleSound} 
       />
       
-      <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-6 py-4 overflow-hidden">
+      <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-4 py-4 overflow-hidden">
         <div className="w-full mb-6">
           <div className="flex justify-between text-sm text-gray-500 mb-2">
             <span className="font-medium">Runde {gameState.currentRound}</span>
@@ -182,31 +182,31 @@ const Game: React.FC = () => {
           )}
         </div>
         
-        <div className="flex justify-center gap-4 mb-6">
+        <div className="flex justify-center gap-3 mb-6">
           <AnimatedTransition
             show={!gameState.isGameOver}
             animateOut="animate-fade-out"
-            className="w-full flex gap-4"
+            className="w-full flex gap-3"
           >
             <Button
               variant="dealbreaker"
               size="lg"
-              className="flex-1 shadow-md hover:shadow-lg transition-all"
+              className="flex-1 shadow-md hover:shadow-lg transition-all text-sm md:text-base"
               onClick={handleDealbreaker}
               disabled={isTransitioning || !currentScenario}
             >
-              <X size={20} className="mr-2" />
+              <X size={18} className="mr-1" />
               Dealbreaker
             </Button>
             
             <Button
               variant="okay"
               size="lg"
-              className="flex-1 shadow-md hover:shadow-lg transition-all"
+              className="flex-1 shadow-md hover:shadow-lg transition-all text-sm md:text-base"
               onClick={handleOkay}
               disabled={isTransitioning || !currentScenario}
             >
-              <Check size={20} className="mr-2" />
+              <Check size={18} className="mr-1" />
               Okay
             </Button>
           </AnimatedTransition>
@@ -218,10 +218,10 @@ const Game: React.FC = () => {
           >
             <Button
               size="lg"
-              className="w-full bg-gradient-to-r from-primary to-primary/80 shadow-md hover:shadow-lg transition-all"
+              className="w-full bg-gradient-to-r from-primary to-primary/80 shadow-md hover:shadow-lg transition-all text-sm md:text-base"
               onClick={handleNewRound}
             >
-              <RefreshCw size={20} className="mr-2" />
+              <RefreshCw size={18} className="mr-1" />
               Neue Runde
             </Button>
           </AnimatedTransition>
@@ -232,7 +232,7 @@ const Game: React.FC = () => {
           animateIn="animate-fade-in"
           className="text-center"
         >
-          <p className="text-gray-600 glass-effect py-2 px-4 rounded-full inline-block">
+          <p className="text-gray-600 glass-effect py-2 px-4 rounded-full inline-block text-sm">
             {gameState.acceptedScenarios.length > 0 
               ? `Du hast ${gameState.acceptedScenarios.length} Eigenschaften akzeptiert.`
               : "Das war sofort ein Dealbreaker für dich!"}
