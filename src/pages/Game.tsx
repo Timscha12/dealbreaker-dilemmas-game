@@ -17,6 +17,7 @@ import {
   GameState
 } from '@/utils/gameLogic';
 import { cn } from '@/lib/utils';
+import { getCustomGameOverMessage } from '@/utils/messageUtils';
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
@@ -71,22 +72,12 @@ const Game: React.FC = () => {
   }, [gameState.isGameOver, gameState.currentScenarioIndex, gameState.scenarios.length, gameState.acceptedScenarios.length, gameState.currentRound]);
   
   const getGameOverMessage = (acceptedCount: number) => {
-    if (acceptedCount === 0) {
-      return "Das war direkt ein Dealbreaker! Ziemlich anspruchsvoll!";
-    } else if (acceptedCount <= 2) {
-      return `Nach nur ${acceptedCount} akzeptierten Eigenschaften ist Schluss! Du bist sehr wählerisch.`;
-    } else if (acceptedCount <= 5) {
-      return `Nach ${acceptedCount} akzeptierten Eigenschaften ist Schluss! Du hast Standards.`;
-    } else if (acceptedCount <= 8) {
-      return `Du hast ${acceptedCount} Eigenschaften akzeptiert. Fast geschafft!`;
-    } else {
-      return `${acceptedCount} Eigenschaften akzeptiert! Nur wenige waren zu viel für dich.`;
-    }
+    return getCustomGameOverMessage(acceptedCount);
   };
   
   const getGameCompletedMessage = (acceptedCount: number, totalCount: number) => {
     if (acceptedCount === totalCount) {
-      return "Alle Eigenschaften akzeptiert! Du bist wirklich unglaublich anspruchslos!";
+      return "💖 Seelenverwandte. Oder einfach völlig schmerzfrei?\nHerzlichen Glückwunsch! Du würdest sogar heiraten, obwohl sie/er mit Pflanzen redet und Katzen tanzen lässt.";
     } else if (acceptedCount >= totalCount - 2) {
       return "Fast alle Eigenschaften akzeptiert! Du bist äußerst tolerant.";
     } else {

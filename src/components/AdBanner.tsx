@@ -5,13 +5,13 @@ import { cn } from '@/lib/utils';
 
 interface AdBannerProps {
   className?: string;
-  position?: 'top' | 'bottom' | 'inline';
+  position?: 'bottom';
   forceShow?: boolean;
 }
 
 const AdBanner: React.FC<AdBannerProps> = ({ 
   className, 
-  position = 'inline',
+  position = 'bottom',
   forceShow = false
 }) => {
   return (
@@ -19,9 +19,7 @@ const AdBanner: React.FC<AdBannerProps> = ({
       className={cn(
         "w-full p-3 rounded-lg overflow-hidden text-center relative bg-opacity-90 backdrop-blur-sm border",
         "animate-pulse-slow",
-        position === 'top' && "mb-4 sticky top-0 z-10",
         position === 'bottom' && "mt-4 sticky bottom-4 z-10",
-        position === 'inline' && "my-4",
         "dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200",
         "bg-gray-100 border-gray-200 text-gray-700",
         className
