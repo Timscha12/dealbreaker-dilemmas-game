@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, Check, X, RefreshCw } from 'lucide-react';
-import { toast } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 import Button from '@/components/Button';
 import ScenarioCard from '@/components/ScenarioCard';
 import Header from '@/components/Header';
