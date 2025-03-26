@@ -24,6 +24,7 @@ import {
   CarouselContent, 
   CarouselItem 
 } from '@/components/ui/carousel';
+import type { EmblaCarouselType } from 'embla-carousel';
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
@@ -118,10 +119,18 @@ const Game: React.FC = () => {
     }, 1500);
   };
   
-  const handleSwipe = (direction: 'left' | 'right') => {
-    if (direction === 'right') {
+  // Updated handleSwipe to work with embla carousel events
+  const handleSwipe = (carousel: EmblaCarouselType | undefined) => {
+    if (!carousel) return;
+    
+    // Get the drag offset to determine swipe direction
+    const dragOffset = carousel.dragOffset();
+    
+    if (dragOffset < 0) {
+      // Swiped right
       handleOkay();
-    } else {
+    } else if (dragOffset > 0) {
+      // Swiped left
       handleDealbreaker();
     }
   };
@@ -236,9 +245,9 @@ const Game: React.FC = () => {
                 "w-full max-w-xs h-auto mx-auto",
                 gameState.isGameOver ? "pointer-events-none" : ""
               )}
-              onDragEnd={(direction) => {
+              onDragEnd={(e) => {
                 if (!gameState.isGameOver && !isTransitioning) {
-                  handleSwipe(direction === 'left' ? 'left' : 'right');
+                  handleSwipe(e);
                 }
               }}
             >
