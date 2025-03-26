@@ -119,18 +119,20 @@ const Game: React.FC = () => {
     }, 1500);
   };
   
-  // Updated handleSwipe to work with embla carousel events
-  const handleSwipe = (carousel: EmblaCarouselType | undefined) => {
-    if (!carousel) return;
+  // Fixed handleSwipe to properly work with embla carousel
+  const handleSwipe = (emblaApi: EmblaCarouselType | undefined) => {
+    if (!emblaApi) return;
     
-    // Get the drag offset to determine swipe direction
-    const dragOffset = carousel.dragOffset();
+    // Get the scroll progress to determine direction
+    // Using scrollProgress instead of dragOffset
+    const scrollProgress = emblaApi.scrollProgress();
     
-    if (dragOffset < 0) {
-      // Swiped right
+    // Determine swipe direction based on scroll progress
+    if (scrollProgress > 0.7) {
+      // Swiped right (towards the end)
       handleOkay();
-    } else if (dragOffset > 0) {
-      // Swiped left
+    } else if (scrollProgress < 0.3) {
+      // Swiped left (towards the beginning)
       handleDealbreaker();
     }
   };
@@ -245,9 +247,13 @@ const Game: React.FC = () => {
                 "w-full max-w-xs h-auto mx-auto",
                 gameState.isGameOver ? "pointer-events-none" : ""
               )}
-              onDragEnd={(e) => {
-                if (!gameState.isGameOver && !isTransitioning) {
-                  handleSwipe(e);
+              setApi={(api) => {
+                // Store API reference if needed for future use
+                if (!gameState.isGameOver && !isTransitioning && api) {
+                  api.on("select", () => {
+                    // Handle the select event to determine swipe direction
+                    handleSwipe(api);
+                  });
                 }
               }}
             >
