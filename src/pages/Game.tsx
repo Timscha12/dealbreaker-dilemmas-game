@@ -19,6 +19,11 @@ import {
 import { cn } from '@/lib/utils';
 import { getCustomGameOverMessage, getCustomGameOverEmoji } from '@/utils/messageUtils';
 import { prepareInterstitialAd, showInterstitialAd } from '@/utils/adService';
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem 
+} from '@/components/ui/carousel';
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
@@ -111,6 +116,14 @@ const Game: React.FC = () => {
         setShowBrokenHeart(false);
       }, 1000);
     }, 1500);
+  };
+  
+  const handleSwipe = (direction: 'left' | 'right') => {
+    if (direction === 'right') {
+      handleOkay();
+    } else {
+      handleDealbreaker();
+    }
   };
   
   const handleNewRound = () => {
@@ -218,16 +231,32 @@ const Game: React.FC = () => {
         
         <div className="flex-1 flex items-center justify-center mb-6 min-h-[120px]">
           {currentScenario ? (
-            <ScenarioCard
-              scenario={currentScenario}
-              isActive
-              isNew={gameState.acceptedScenarios.length > 0}
+            <Carousel
               className={cn(
-                "transform transition-all duration-300",
-                gameState.isGameOver ? "opacity-50" : "",
-                !gameState.isGameOver && "hover:scale-[1.02] shadow-lg"
+                "w-full max-w-xs h-auto mx-auto",
+                gameState.isGameOver ? "pointer-events-none" : ""
               )}
-            />
+              onDragEnd={(direction) => {
+                if (!gameState.isGameOver && !isTransitioning) {
+                  handleSwipe(direction === 'left' ? 'left' : 'right');
+                }
+              }}
+            >
+              <CarouselContent>
+                <CarouselItem>
+                  <ScenarioCard
+                    scenario={currentScenario}
+                    isActive
+                    isNew={gameState.acceptedScenarios.length > 0}
+                    className={cn(
+                      "transform transition-all duration-300",
+                      gameState.isGameOver ? "opacity-50" : "",
+                      !gameState.isGameOver && "hover:scale-[1.02] shadow-lg"
+                    )}
+                  />
+                </CarouselItem>
+              </CarouselContent>
+            </Carousel>
           ) : (
             <AnimatedTransition show={gameState.isGameOver && gameState.currentScenarioIndex >= gameState.scenarios.length}>
               <div className="text-center p-6 bg-gradient-to-b from-slate-800 to-slate-900 rounded-xl border border-slate-700 shadow-md">
